@@ -21,6 +21,21 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
+          env:
+              - name: MYSQL_HOST
+                value: mariadb
+              - name: MYSQL_USER
+                valueFrom:
+                  secretKeyRef:
+                    name: mariadb-secret
+                    key: user-username
+              - name: MYSQL_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: mariadb-secret
+                    key: user-password
+              - name: MYSQL_DATABASE
+                value: springpdfdb
 
 ---
 
@@ -58,6 +73,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mariadb-deployment
+  labels:
+    app: springpdf
 spec:
   selector:
     matchLabels:
@@ -88,6 +105,8 @@ spec:
                 secretKeyRef:
                   name: mariadb-secret
                   key: user-password
+            - name: MYSQL_DATABASE
+              value: springpdfdb
           ports:
             - containerPort: 3306
               name: mariadb
