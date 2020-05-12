@@ -90,7 +90,7 @@ spec:
         - image: mariadb:latest
           name: mariadb
           env:
-            - name: MYSQL_RANDOM_ROOT_PASSWORD
+            - name: MYSQL_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: mariadb-secret
