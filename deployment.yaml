@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: springpdf-deployment
+  labels:
+    app: springpdf
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: springpdf
+  template:
+    metadata:
+      labels:
+        app: springpdf
+    spec:
+      containers:
+        - name: springpdf
+          image: amolina0412/springpdf
+          ports:
+            - containerPort: 8080
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: springpdf
+  labels:
+    run: springpdf
+spec:
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+      name: http
+  selector:
+    app: springpdf
