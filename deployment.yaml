@@ -14,9 +14,11 @@ spec:
       labels:
         app: springpdf
     spec:
+      terminationGracePeriodSeconds: 30
       containers:
         - name: springpdf
           image: amolina0412/springpdf:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 8080
 
