@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: springpdf
-          image: amolina0412/springpdf
+          image: amolina0412/springpdf:latest
           ports:
             - containerPort: 8080
 
