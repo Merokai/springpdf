@@ -1,5 +1,27 @@
 package io.rtx.report;
 
+import com.itextpdf.io.image.ImageData;
+import com.itextpdf.io.image.ImageDataFactory;
+import com.itextpdf.kernel.events.PdfDocumentEvent;
+import com.itextpdf.kernel.geom.Rectangle;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfPage;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.kernel.pdf.canvas.PdfCanvas;
+import com.itextpdf.kernel.pdf.canvas.draw.SolidLine;
+import com.itextpdf.layout.Canvas;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Div;
+import com.itextpdf.layout.element.Image;
+import com.itextpdf.layout.element.LineSeparator;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.property.HorizontalAlignment;
+import com.itextpdf.layout.property.TextAlignment;
+import io.rtx.sales.SalesEntity;
+import io.rtx.sales.SalesRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
@@ -12,38 +34,21 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
-import com.itextpdf.io.image.ImageData;
-import com.itextpdf.io.image.ImageDataFactory;
-import com.itextpdf.kernel.colors.DeviceRgb;
-import com.itextpdf.kernel.events.PdfDocumentEvent;
-import com.itextpdf.kernel.geom.Rectangle;
-import com.itextpdf.kernel.pdf.PdfPage;
-import com.itextpdf.kernel.pdf.canvas.PdfCanvas;
-import com.itextpdf.kernel.pdf.canvas.draw.SolidLine;
-import com.itextpdf.layout.Canvas;
-import com.itextpdf.layout.property.HorizontalAlignment;
-import com.itextpdf.layout.property.TextAlignment;
-import io.rtx.sales.SalesEntity;
-import io.rtx.sales.SalesRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import com.itextpdf.kernel.pdf.PdfDocument;
-import com.itextpdf.kernel.pdf.PdfWriter;
-import com.itextpdf.layout.Document;
-import com.itextpdf.layout.element.*;
-
 @Service
 public class ReportService {
 
-    @Autowired
-    private SalesRepository salesRepository;
+    private final SalesRepository salesRepository;
+
+    private final ReportHelper reportHelper;
+
+    private final StatisticService statisticService;
 
     @Autowired
-    private ReportHelper reportHelper;
-
-    @Autowired
-    private StatisticService statisticService;
+    public ReportService(SalesRepository salesRepository, ReportHelper reportHelper, StatisticService statisticService) {
+        this.salesRepository = salesRepository;
+        this.reportHelper = reportHelper;
+        this.statisticService = statisticService;
+    }
 
     public void generateReport(OutputStream output) {
         PdfDocument pdf = new PdfDocument(new PdfWriter(output));
