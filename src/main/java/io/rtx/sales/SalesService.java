@@ -18,8 +18,12 @@ import org.springframework.stereotype.Service;
 @Transactional
 public class SalesService {
 
+    private final SalesRepository repo;
+
     @Autowired
-    private SalesRepository repo;
+    public SalesService(SalesRepository repo) {
+        this.repo = repo;
+    }
 
     public SalesEntity add(SalesInput sales) {
         SalesEntity entity = new SalesEntity();
